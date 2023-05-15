@@ -102,7 +102,7 @@ public class Card
      * Submits the player's answer to the card and determines if the submitted
      * answer matches with the card's answer
      * 
-     * @param answer
+     * @param a
      *            - answer that the player is submtting
      * @param player
      *            - player that is submitting this answer
@@ -110,8 +110,14 @@ public class Card
      *         card), false if the submitted answer does not match answer(the
      *         answer to the card)
      */
-    public boolean submitAnswer(String answer, Player player)
+    public boolean submitAnswer(String a, Player player)
     {
+        if (a.equals(answer))
+        {
+            player.changePoints(points);
+            correct = true;
+            return true;
+        }
         return false;
     }
 

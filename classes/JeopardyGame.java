@@ -1,6 +1,10 @@
 package classes;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -19,9 +23,9 @@ public class JeopardyGame
     /**
      * Adds a player to the Jeopardy Game
      */
-    public void addPlayer()
+    public void addPlayer(Player player)
     {
-
+        players.add(player);
     }
 
 
@@ -32,7 +36,13 @@ public class JeopardyGame
      */
     public ArrayList<Player> getPlayers()
     {
-        return null; // TODO Fix This!
+        ArrayList<Player> p = new ArrayList<Player>();
+        Iterator<Player> i = players.iterator();
+        while (i.hasNext())
+        {
+            p.add(i.next());
+        }
+        return p;
     }
 
 
@@ -45,7 +55,12 @@ public class JeopardyGame
      */
     public Card[] getFiveRandomCards(int point)
     {
-        return null; // TODO Fix This!
+        Card[] card = new Card[5];
+        for (int i = 0; i < 5; i++)
+        {
+            card[i] = getSingularCard(point);
+        }
+        return card;
     }
 
 
@@ -58,7 +73,24 @@ public class JeopardyGame
      */
     private Card getSingularCard(int point)
     {
-        return null; // TODO Fix This!
+        String pathname = point + ".txt";
+        File file = new File(pathname);
+        Scanner input = null;
+        try
+        {
+            input = new Scanner(file);
+        }
+        catch (FileNotFoundException ex)
+        {
+            System.out.println("***Cannot open " + pathname + " ***");
+            System.exit(1);
+        }
+
+        while (input.hasNext())
+        {
+            String str = input.nextLine();
+
+        }
     }
 
 
