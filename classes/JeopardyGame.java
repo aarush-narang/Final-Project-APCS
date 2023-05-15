@@ -47,13 +47,37 @@ public class JeopardyGame
 
 
     /**
+     * Gets the questions for the game
+     * 
+     * @return a TreeMap of questions
+     */
+    public TreeMap<Integer, Card[]> getQuestions()
+    {
+        return questions;
+    }
+
+
+    /**
+     * Gets the questions for the game given the point value
+     * 
+     * @param points
+     *            the point value for the questions
+     * @return an array of questions
+     */
+    public Card[] getQuestions(int points)
+    {
+        return questions.get(points);
+    }
+
+
+    /**
      * Gets five random cards given the point value
      * 
      * @param point
      *            the point value for which you want the questions
      * @return returns an array of five random cards
      */
-    public Card[] getFiveRandomCards(int point)
+    private Card[] getFiveRandomCards(int point)
     {
         Card[] card = new Card[5];
         for (int i = 0; i < 5; i++)
@@ -73,12 +97,21 @@ public class JeopardyGame
      */
     private Card getSingularCard(int point)
     {
-        String pathname = point + ".txt";
+        Card retVal = null;
+
+        String filename = point + ".csv";
+        String pathname = "assets/jeopardy-questions/main/" + filename;
+
         File file = new File(pathname);
         Scanner input = null;
+        Scanner input2 = null;
+
+        // instantiate the Scanner objects: one to count the number of lines and
+        // the other to get the random question
         try
         {
             input = new Scanner(file);
+            input2 = new Scanner(file);
         }
         catch (FileNotFoundException ex)
         {
@@ -86,18 +119,52 @@ public class JeopardyGame
             System.exit(1);
         }
 
+        // count the number of lines in the file
+        int numLines = 0;
         while (input.hasNext())
         {
-            String str = input.nextLine();
-
+            numLines++;
+            input.nextLine();
         }
+
+        // get a random question
+        int randomQuestionLine = (int)(Math.random() * numLines);
+        int count = 0;
+        while (input2.hasNext())
+        {
+            if (count == randomQuestionLine)
+            {
+                String str = input2.nextLine();
+                String[] arr = str.split("\",\"");
+
+                String category = arr[0];
+                String pointValue = arr[1].replace("$", "");
+                String question = arr[2];
+                String answer = arr[3];
+
+                retVal = new Card(question, answer, Integer.parseInt(pointValue), category);
+
+                break;
+            }
+
+            count++;
+            input2.nextLine();
+        }
+
+        return retVal;
     }
 
 
-    /**
-     */
     public static void main(String args[])
     {
+        JeopardyGame game = new JeopardyGame();
+        Card[] card = game.getFiveRandomCards(100);
+
+        // print out the questions
+        for (int i = 0; i < 5; i++)
+        {
+            System.out.println(card[i].getQuestion());
+        }
 
     }
 }

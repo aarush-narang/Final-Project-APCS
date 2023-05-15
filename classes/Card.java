@@ -5,6 +5,7 @@ public class Card
     private int     points;
     private String  question;
     private String  answer;
+    private String  category;
     private Player  respondent;
     private boolean correct;
     private boolean isVisible;
@@ -13,32 +14,24 @@ public class Card
      * Constructs a new card with the given point value, question, and answer.
      * The rest is initialized to false or null.
      * 
-     * @param p
-     *            - point value
-     * @param q
+     * @param question
      *            - question
-     * @param a
+     * @param answer
      *            - answer
+     * @param points
+     *            - point value
+     * @param category
+     *            - category
      */
-    public Card(int p, String q, String a)
+    public Card(String question, String answer, int points, String category)
     {
-        points = p;
-        question = q;
-        answer = a;
+        this.points = points;
+        this.question = question;
+        this.answer = answer;
+        this.category = category;
+
         correct = false;
         isVisible = false;
-    }
-
-
-    /**
-     * Retunrs the number of points this card is worth
-     * 
-     * @return number of points
-     */
-
-    public int getPoints()
-    {
-        return points;
     }
 
 
@@ -61,6 +54,29 @@ public class Card
     public String getAnswer()
     {
         return answer;
+    }
+
+
+    /**
+     * Retunrs the number of points this card is worth
+     * 
+     * @return number of points
+     */
+
+    public int getPoints()
+    {
+        return points;
+    }
+
+
+    /**
+     * Returns the category of the card
+     * 
+     * @return the category of the card
+     */
+    public String getCategory()
+    {
+        return category;
     }
 
 
