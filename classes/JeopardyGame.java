@@ -176,7 +176,7 @@ public class JeopardyGame
         
         Card[] 300Cards = game.getFiveRandomCards(300);
         
-        //print out the 200 questions
+        //print out the 300 questions
         for(int i = 0; i < 5; i++)
         {
             System.out.println(300Cards[i].getQuestions());
@@ -184,7 +184,7 @@ public class JeopardyGame
         
         Card[] 400Cards = game.getFiveRandomCards(400);
         
-        //print out the 200 questions
+        //print out the 400 questions
         for(int i = 0; i < 5; i++)
         {
             System.out.println(400Cards[i].getQuestions());
@@ -192,7 +192,7 @@ public class JeopardyGame
         
         Card[] 500Cards = game.getFiveRandomCards(500);
         
-        //print out the 200 questions
+        //print out the 500 questions
         for(int i = 0; i < 5; i++)
         {
             System.out.println(500Cards[i].getQuestions());
