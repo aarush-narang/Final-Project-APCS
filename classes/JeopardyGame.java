@@ -158,12 +158,44 @@ public class JeopardyGame
     public static void main(String args[])
     {
         JeopardyGame game = new JeopardyGame();
-        Card[] card = game.getFiveRandomCards(100);
+        Card[] 100Cards = game.getFiveRandomCards(100);
 
-        // print out the questions
+        // print out the 100 questions
         for (int i = 0; i < 5; i++)
         {
-            System.out.println(card[i].getQuestion());
+            System.out.println(100Cards[i].getQuestion());
+        }
+        
+        Card[] 200Cards = game.getFiveRandomCards(200);
+        
+        //print out the 200 questions
+        for(int i = 0; i < 5; i++)
+        {
+            System.out.println(200Cards[i].getQuestions());
+        }
+        
+        Card[] 300Cards = game.getFiveRandomCards(300);
+        
+        //print out the 200 questions
+        for(int i = 0; i < 5; i++)
+        {
+            System.out.println(300Cards[i].getQuestions());
+        }
+        
+        Card[] 400Cards = game.getFiveRandomCards(400);
+        
+        //print out the 200 questions
+        for(int i = 0; i < 5; i++)
+        {
+            System.out.println(400Cards[i].getQuestions());
+        }
+        
+        Card[] 500Cards = game.getFiveRandomCards(500);
+        
+        //print out the 200 questions
+        for(int i = 0; i < 5; i++)
+        {
+            System.out.println(500Cards[i].getQuestions());
         }
 
     }
