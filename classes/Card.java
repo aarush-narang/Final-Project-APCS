@@ -2,9 +2,9 @@ package classes;
 
 public class Card
 {
-    private int     points;
     private String  question;
     private String  answer;
+    private int     points;
     private String  category;
     private Player  respondent;
     private boolean correct;
@@ -103,6 +103,18 @@ public class Card
 
 
     /**
+     * Returns if the player answered the card correctly or not
+     * 
+     * @return true if the player answered the card correctly, false if the
+     *         player did not answer the card correctly
+     */
+    public boolean getCorrect()
+    {
+        return correct;
+    }
+
+
+    /**
      * Sets the card's visibility to the visibility in the parameter
      * 
      * @param visible
@@ -128,13 +140,24 @@ public class Card
      */
     public boolean submitAnswer(String a, Player player)
     {
+        respondent = player;
+
         if (a.equals(answer))
         {
             player.changePoints(points);
+
             correct = true;
             return true;
         }
+
+        correct = false;
         return false;
+    }
+
+
+    public String toString()
+    {
+        return question + ": " + answer + " ($" + points + ")";
     }
 
 }

@@ -7,9 +7,11 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import javax.swing.JFrame;
 
 public class JeopardyGame
 {
+    private static final int         MAX_POINTS = 500;
     private TreeSet<Player>          players;
     private TreeMap<Integer, Card[]> questions;
 
@@ -17,6 +19,11 @@ public class JeopardyGame
     {
         players = new TreeSet<Player>();
         questions = new TreeMap<Integer, Card[]>();
+
+        for (int i = 100; i <= MAX_POINTS; i += 100)
+        {
+            questions.put(i, getFiveRandomCards(i));
+        }
     }
 
 
@@ -97,21 +104,15 @@ public class JeopardyGame
      */
     private Card getSingularCard(int point)
     {
-        Card retVal = null;
-
         String filename = point + ".csv";
         String pathname = "assets/jeopardy-questions/main/" + filename;
 
         File file = new File(pathname);
         Scanner input = null;
-        Scanner input2 = null;
 
-        // instantiate the Scanner objects: one to count the number of lines and
-        // the other to get the random question
         try
         {
             input = new Scanner(file);
-            input2 = new Scanner(file);
         }
         catch (FileNotFoundException ex)
         {
@@ -119,7 +120,6 @@ public class JeopardyGame
             System.exit(1);
         }
 
-        // count the number of lines in the file
         int numLines = 0;
         while (input.hasNext())
         {
@@ -127,76 +127,61 @@ public class JeopardyGame
             input.nextLine();
         }
 
-        // get a random question
         int randomQuestionLine = (int)(Math.random() * numLines);
         int count = 0;
-        while (input2.hasNext())
+
+        try
         {
-            if (count == randomQuestionLine)
+            input = new Scanner(file);
+            while (input.hasNext())
             {
-                String str = input2.nextLine();
-                String[] arr = str.split("\",\"");
+                if (count == randomQuestionLine)
+                {
+                    String str = input.nextLine();
+                    String[] arr = str.split("\",\"");
 
-                String category = arr[0];
-                String pointValue = arr[1].replace("$", "");
-                String question = arr[2];
-                String answer = arr[3];
+                    String category = arr[0];
+                    String pointValue = arr[1].replace("$", "");
+                    String question = arr[2];
+                    String answer = arr[3];
 
-                retVal = new Card(question, answer, Integer.parseInt(pointValue), category);
+                    input.close();
 
-                break;
+                    return new Card(question, answer, Integer.parseInt(pointValue), category);
+                }
+
+                count++;
+                input.nextLine();
             }
+        }
+        catch (FileNotFoundException ex)
+        {
+            input.close();
 
-            count++;
-            input2.nextLine();
+            System.out.println("***Cannot open " + pathname + " ***");
+            System.exit(1);
         }
 
-        return retVal;
+        input.close();
+
+        return null;
     }
 
 
     public static void main(String args[])
     {
         JeopardyGame game = new JeopardyGame();
-        Card[] 100Cards = game.getFiveRandomCards(100);
 
-        // print out the 100 questions
-        for (int i = 0; i < 5; i++)
-        {
-            System.out.println(100Cards[i].getQuestion());
-        }
-        
-        Card[] 200Cards = game.getFiveRandomCards(200);
-        
-        //print out the 200 questions
-        for(int i = 0; i < 5; i++)
-        {
-            System.out.println(200Cards[i].getQuestions());
-        }
-        
-        Card[] 300Cards = game.getFiveRandomCards(300);
-        
-        //print out the 300 questions
-        for(int i = 0; i < 5; i++)
-        {
-            System.out.println(300Cards[i].getQuestions());
-        }
-        
-        Card[] 400Cards = game.getFiveRandomCards(400);
-        
-        //print out the 400 questions
-        for(int i = 0; i < 5; i++)
-        {
-            System.out.println(400Cards[i].getQuestions());
-        }
-        
-        Card[] 500Cards = game.getFiveRandomCards(500);
-        
-        //print out the 500 questions
-        for(int i = 0; i < 5; i++)
-        {
-            System.out.println(500Cards[i].getQuestions());
-        }
+        // Creating Object of CardLayout class.
+        GameWindow cl = new GameWindow(game);
 
+        // Function to set size of JFrame.
+        cl.setSize(400, 400);
+
+        // Function to set visibility of JFrame.
+        cl.setVisible(true);
+
+        // Function to set default operation of JFrame.
+        cl.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
