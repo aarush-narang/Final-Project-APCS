@@ -2,7 +2,6 @@ package classes;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,15 +19,22 @@ class LoginWindow
     extends JFrame
     implements ActionListener
 {
+    private JeopardyGame game;
+
     // initialize button, panel, label, and text field
-    JButton          b1;
-    JPanel           newPanel;
-    JLabel           userLabel, passLabel;
-    final JTextField textField1, textField2;
+
+    boolean twoFieldsMatch; // checks if number of players equals the number of names
+
+    JButton              b1;
+    JPanel               newPanel;
+    JLabel               userLabel, passLabel;
+    final JTextField     textField1, textField2;
+    //JButton leaderboard;
 
     // calling constructor
-    LoginWindow()
+    LoginWindow(JeopardyGame game)
     {
+        this.game = game;
 
         // create label for username
         userLabel = new JLabel();
@@ -40,13 +46,13 @@ class LoginWindow
 
         // create label for password
         passLabel = new JLabel();
-        passLabel.setText("Names");      // set label value for textField2
+        passLabel.setText("Names (Seperated by a comma in quotes -> \",\")");      // set label value for textField2
 
         // create text field to get password from the user
         textField2 = new JTextField(15);    // set length for the password
 
         // create submit button
-        b1 = new JButton("SUBMIT"); // set label to button
+        b1 = new JButton("Submit"); // set label to button
 
         // create panel to put form elements
         newPanel = new JPanel(new GridLayout(3, 1));
@@ -61,13 +67,14 @@ class LoginWindow
 
         // perform action on button click
         b1.addActionListener(this);     // add action listener to button
-        setTitle("LOGIN FORM");         // set title to the login form
+        setTitle("Login Window");         // set title to the login form
+
     }
 
 
     // define abstract method actionPerformed() which will be called on button
     // click
-    public void actionPerformed(ActionEvent ae)     // pass action listener as a
+    public ArrayList<Player> playersInTheGame()    // pass action listener as a
                                                     // parameter
     {
         String numPlayers = textField1.getText();        // get user entered
@@ -75,8 +82,21 @@ class LoginWindow
                                                          // textField1
         String userNames = textField2.getText();        // get user entered
 
-        String[] theNames = userNames.split(",");
+        String[] theNames = userNames.split("\",\"");
         ArrayList<String> names = new ArrayList<>(Arrays.asList(theNames));
+
+        for (String name : names)
+        {
+            Player p = new Player(name);
+            game.addPlayer(p);
+        }
+        ArrayList<Player> players = game.getPlayers();
+        return players;
+    }
+    
+    
+
+
         // pasword from the
         // textField2
 
@@ -111,10 +131,12 @@ class LoginWindowDemo
     // main() method start
     public static void main(String arg[])
     {
+        JeopardyGame j = new JeopardyGame();
+
         try
         {
             // create instance of the CreateLoginForm
-            LoginWindow form = new LoginWindow();
+            LoginWindow form = new LoginWindow(j);
             form.setSize(300, 100);  // set size of the frame
             form.setVisible(true);  // make form visible to the user
         }

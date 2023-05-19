@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -11,13 +13,15 @@ import javax.swing.JFrame;
 
 public class JeopardyGame
 {
-    private static final int         MAX_POINTS = 500;
+    public static final int          MAX_POINTS = 500;
     private TreeSet<Player>          players;
+    private Queue<Player>            playerQueue;
     private TreeMap<Integer, Card[]> questions;
 
     public JeopardyGame()
     {
         players = new TreeSet<Player>();
+        playerQueue = new LinkedList<Player>();
         questions = new TreeMap<Integer, Card[]>();
 
         for (int i = 100; i <= MAX_POINTS; i += 100)
@@ -33,13 +37,14 @@ public class JeopardyGame
     public void addPlayer(Player player)
     {
         players.add(player);
+        playerQueue.add(player);
     }
 
 
     /**
      * Returns an ArrayList of players from the TreeSet for convenient access
      * 
-     * @return an ArrayList of players
+     * @return an ArrayList of players in descending order
      */
     public ArrayList<Player> getPlayers()
     {
@@ -50,6 +55,31 @@ public class JeopardyGame
             p.add(i.next());
         }
         return p;
+    }
+
+
+    /**
+     * Gets the next player in the queue
+     * 
+     * @return the next player in the queue
+     */
+    public Player getNextPlayer()
+    {
+        Player player = playerQueue.poll();
+        playerQueue.add(player);
+
+        return player;
+    }
+
+
+    /**
+     * Gets the current player
+     * 
+     * @return the current player
+     */
+    public Player getCurrentPlayer()
+    {
+        return playerQueue.peek();
     }
 
 
@@ -138,7 +168,7 @@ public class JeopardyGame
                 if (count == randomQuestionLine)
                 {
                     String str = input.nextLine();
-                    String[] arr = str.split("\",\"");
+                    String[] arr = str.substring(1, str.length() - 1).split("\",\"");
 
                     String category = arr[0];
                     String pointValue = arr[1].replace("$", "");
@@ -171,6 +201,14 @@ public class JeopardyGame
     public static void main(String args[])
     {
         JeopardyGame game = new JeopardyGame();
+
+        Player p1 = new Player("Player 1");
+        Player p2 = new Player("Player 2");
+        Player p3 = new Player("Player 3");
+
+        game.addPlayer(p1);
+        game.addPlayer(p2);
+        game.addPlayer(p3);
 
         // Creating Object of CardLayout class.
         GameWindow cl = new GameWindow(game);

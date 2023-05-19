@@ -1,6 +1,7 @@
 package classes;
 
 public class Player
+    implements Comparable
 {
 
     private String username;
@@ -62,6 +63,15 @@ public class Player
 
 
     /**
+     * Returns a string representation of the player
+     */
+    public String toString()
+    {
+        return username + ": " + points;
+    }
+
+
+    /**
      * compareTo method for the Player class that compares the points of the
      * players. This method is used by the TreeSet to sort the players by
      * points.
@@ -71,13 +81,14 @@ public class Player
      * @return 0 if the points are equal, 1 if the points of this player are, -1
      *         if the points of the other player are greater
      */
-    public int compareTo(Player other)
+    public int compareTo(Object other)
     {
-        if (points == other.points)
+        Player otherPlayer = (Player)other;
+        if (points == otherPlayer.points)
         {
             return 0;
         }
-        else if (points > other.points)
+        else if (points > otherPlayer.points)
         {
             return 1;
         }

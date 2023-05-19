@@ -31,7 +31,7 @@ public class Card
         this.category = category;
 
         correct = false;
-        isVisible = false;
+        isVisible = true;
     }
 
 
@@ -115,14 +115,11 @@ public class Card
 
 
     /**
-     * Sets the card's visibility to the visibility in the parameter
-     * 
-     * @param visible
-     *            - the visibility to set the visibility of the card to
+     * Disables the card so that it is no longer accessible
      */
-    public void setVisibility(boolean visible)
+    public void disableQuestion()
     {
-        isVisible = visible;
+        isVisible = false;
     }
 
 
@@ -142,7 +139,7 @@ public class Card
     {
         respondent = player;
 
-        if (a.equals(answer))
+        if (a.equalsIgnoreCase(answer))
         {
             player.changePoints(points);
 
