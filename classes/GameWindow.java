@@ -24,7 +24,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-// class extends JFrame and implements actionlistener
+/**
+ * This class creates the game window for the Jeopardy game
+ */
 public class GameWindow
     extends JFrame
     implements ActionListener
@@ -43,6 +45,12 @@ public class GameWindow
 
     JTextField           field;
 
+    /**
+     * Constructs a new game window
+     * 
+     * @param game
+     *            - the game to be played
+     */
     public GameWindow(JeopardyGame game)
     {
         this.game = game;
@@ -58,7 +66,7 @@ public class GameWindow
         c = getContentPane();
 
         // Initialize grid layout
-        int rows = JeopardyGame.MAX_POINTS / 100;
+        int rows = (JeopardyGame.MAX_POINTS / 100) + 1;
         int cols = 5;
         GridLayout grid = new GridLayout(rows, cols);
         grid.setHgap(5);
@@ -75,6 +83,8 @@ public class GameWindow
                 makeButton(card);
             }
         }
+
+        makeLeaderbordButton();
     }
 
 
@@ -126,6 +136,12 @@ public class GameWindow
                     {
                         // Get the player's answer
                         String answer = answerField.getText();
+
+                        if (answer.equals(""))
+                        {
+                            JOptionPane.showMessageDialog(questionFrame, "Please enter an answer.");
+                            return;
+                        }
 
                         boolean correct = card.submitAnswer(answer, game.getCurrentPlayer());
 
@@ -204,9 +220,19 @@ public class GameWindow
                 }
 
                 qFrame.add(qPanel);
+                qFrame.pack(); // Pack the components in the JFrame
+                qFrame.setVisible(true); // Make the JFrame visible
             }
         });
 
+        // Adding the leaderboard button to the game window
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.0;
+        gbc.gridwidth = 5; // Set gridwidth to 5
+        buttonPanel.add(leaderboard, gbc);
+        c.add(buttonPanel);
     }
 
 

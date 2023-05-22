@@ -20,6 +20,9 @@ public class Player
     }
 
 
+    /**
+     * Constructs a new player with the given username and 0 points
+     */
     public Player(String u)
     {
         username = u;
@@ -63,7 +66,7 @@ public class Player
 
 
     /**
-     * Returns a string representation of the player
+     * @return a string representation of the player
      */
     public String toString()
     {

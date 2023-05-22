@@ -148,10 +148,14 @@ public class Card
         }
 
         correct = false;
+        player.changePoints(-points);
         return false;
     }
 
 
+    /**
+     * @return the question and answer along with the point value as a string
+     */
     public String toString()
     {
         return question + ": " + answer + " ($" + points + ")";

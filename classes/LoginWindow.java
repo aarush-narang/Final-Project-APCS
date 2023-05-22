@@ -2,9 +2,12 @@ package classes;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,43 +26,36 @@ class LoginWindow
 
     // initialize button, panel, label, and text field
 
-    boolean twoFieldsMatch; // checks if number of players equals the number of names
+    boolean              twoFieldsMatch; // checks if number of players equals
+                                         // the number of names
 
     JButton              b1;
     JPanel               newPanel;
-    JLabel               userLabel, passLabel;
-    final JTextField     textField1, textField2;
-    //JButton leaderboard;
+    JLabel               passLabel;
+    final JTextField     textField1;
+    // JButton leaderboard;
 
     // calling constructor
     LoginWindow(JeopardyGame game)
     {
         this.game = game;
 
-        // create label for username
-        userLabel = new JLabel();
-        userLabel.setText("Number of Players");      // set label value for
-                                                     // textField1
-
-        // create text field to get username from the user
-        textField1 = new JTextField(15);    // set length of the text
+        setTitle("Login Window");         // set title to the login form
 
         // create label for password
         passLabel = new JLabel();
-        passLabel.setText("Names (Seperated by a comma in quotes -> \",\")");      // set label value for textField2
+        passLabel.setText("Names (Seperated by a comma)");
 
-        // create text field to get password from the user
-        textField2 = new JTextField(15);    // set length for the password
+        // create text field to get username from the user
+        textField1 = new JTextField(15);    // set length of the text
 
         // create submit button
         b1 = new JButton("Submit"); // set label to button
 
         // create panel to put form elements
         newPanel = new JPanel(new GridLayout(3, 1));
-        newPanel.add(userLabel);    // set username label to panel
-        newPanel.add(textField1);   // set text field to panel
         newPanel.add(passLabel);    // set password label to panel
-        newPanel.add(textField2);   // set text field to panel
+        newPanel.add(textField1);   // set text field to panel
         newPanel.add(b1);           // set button to panel
 
         // set border to panel
@@ -67,58 +63,87 @@ class LoginWindow
 
         // perform action on button click
         b1.addActionListener(this);     // add action listener to button
-        setTitle("Login Window");         // set title to the login form
-
     }
 
 
     // define abstract method actionPerformed() which will be called on button
     // click
-    public ArrayList<Player> playersInTheGame()    // pass action listener as a
-                                                    // parameter
+    private void addPlayersInTheGame()    // pass action listener as a
+                                          // parameter
     {
-        String numPlayers = textField1.getText();        // get user entered
-                                                         // username from the
-                                                         // textField1
-        String userNames = textField2.getText();        // get user entered
+        // username from the
+        // textField1
+        String userNames = textField1.getText();        // get user entered
 
-        String[] theNames = userNames.split("\",\"");
+        String[] theNames = userNames.split(",");
+        for (int i = 0; i < theNames.length; i++)
+        {
+            theNames[i] = theNames[i].strip();
+        }
+
         ArrayList<String> names = new ArrayList<>(Arrays.asList(theNames));
+
+        Set<String> myNamesSet = new HashSet<String>(names);
+
+        if (myNamesSet.size() != names.size())
+        {
+            // throw the error
+            JOptionPane.showMessageDialog(this, "Please enter unique names");
+            return;
+        }
 
         for (String name : names)
         {
-            Player p = new Player(name);
+            Player p = new Player(name.strip());
             game.addPlayer(p);
         }
-        ArrayList<Player> players = game.getPlayers();
-        return players;
+
+        // throw dialog errors when two names are the same
     }
-    
-    
+
+    // pasword from the
+    // textField2
+
+    // check whether the credentials are authentic or not
+    // if (userValue.equals("test1@gmail.com") && passValue.equals("test"))
+    // { // if authentic, navigate user to a new page
+
+    // // create instance of the NewPage
+    // NewPage page = new NewPage();
+
+    // // make page visible to the user
+    // page.setVisible(true);
 
 
-        // pasword from the
-        // textField2
+    // // create a welcome label and set it to the new page
+    // JLabel wel_label = new JLabel("Welcome: " + userValue);
+    // page.getContentPane().add(wel_label);
+    // }
+    // else
+    // {
+    // // show error message
+    // System.out.println("Please enter valid username and password");
+    // }
+    public void actionPerformed(ActionEvent e)
+    {
+        addPlayersInTheGame();
 
-        // check whether the credentials are authentic or not
-        // if (userValue.equals("test1@gmail.com") && passValue.equals("test"))
-        // { // if authentic, navigate user to a new page
+        if (game.getPlayers().size() == 0)
+        {
+            return;
+        }
 
-        // // create instance of the NewPage
-        // NewPage page = new NewPage();
+        // close the login form
+        dispose();
 
-        // // make page visible to the user
-        // page.setVisible(true);
+        GameWindow gameWindow = new GameWindow(game);
+        gameWindow.setSize(400, 400);
 
-        // // create a welcome label and set it to the new page
-        // JLabel wel_label = new JLabel("Welcome: " + userValue);
-        // page.getContentPane().add(wel_label);
-        // }
-        // else
-        // {
-        // // show error message
-        // System.out.println("Please enter valid username and password");
-        // }
+        // Function to set visibility of JFrame.
+        gameWindow.setVisible(true);
+
+        // Function to set default operation of JFrame.
+        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
 

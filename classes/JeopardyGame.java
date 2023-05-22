@@ -202,24 +202,15 @@ public class JeopardyGame
     {
         JeopardyGame game = new JeopardyGame();
 
-        Player p1 = new Player("Player 1");
-        Player p2 = new Player("Player 2");
-        Player p3 = new Player("Player 3");
-
-        game.addPlayer(p1);
-        game.addPlayer(p2);
-        game.addPlayer(p3);
-
-        // Creating Object of CardLayout class.
-        GameWindow cl = new GameWindow(game);
+        LoginWindow login = new LoginWindow(game);
 
         // Function to set size of JFrame.
-        cl.setSize(400, 400);
+        login.setSize(400, 400);
 
         // Function to set visibility of JFrame.
-        cl.setVisible(true);
+        login.setVisible(true);
 
         // Function to set default operation of JFrame.
-        cl.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
