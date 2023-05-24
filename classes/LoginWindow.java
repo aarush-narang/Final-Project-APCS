@@ -23,23 +23,25 @@ import javax.swing.JTextField;
 // class extends JFrame to create a window where our component add
 // class implements ActionListener to perform an action on button click
 class LoginWindow
-        extends JFrame
-        implements ActionListener {
+    extends JFrame
+    implements ActionListener
+{
     private JeopardyGame game;
 
     // initialize button, panel, label, and text field
 
-    boolean twoFieldsMatch; // checks if number of players equals
-                            // the number of names
+    boolean              twoFieldsMatch; // checks if number of players equals
+                                         // the number of names
 
-    JButton b1;
-    JPanel newPanel;
-    JLabel passLabel;
-    final JTextField textField1;
+    JButton              b1;
+    JPanel               newPanel;
+    JLabel               passLabel;
+    final JTextField     textField1;
     // JButton leaderboard;
 
     // calling constructor
-    LoginWindow(JeopardyGame game) {
+    LoginWindow(JeopardyGame game)
+    {
         this.game = game;
 
         setTitle("Login Window"); // set title to the login form
@@ -47,6 +49,7 @@ class LoginWindow
         // create label for password
         passLabel = new JLabel();
         passLabel.setText("Names (Seperated by a comma)");
+        passLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
         // create text field to get username from the user
         textField1 = new JTextField(15); // set length of the text
@@ -68,6 +71,7 @@ class LoginWindow
         b1.addActionListener(this); // add action listener to button
     }
 
+
     // define abstract method actionPerformed() which will be called on button
     // click
     private void addPlayersInTheGame() // pass action listener as a
@@ -78,7 +82,8 @@ class LoginWindow
         String userNames = textField1.getText(); // get user entered
 
         String[] theNames = userNames.split(",");
-        for (int i = 0; i < theNames.length; i++) {
+        for (int i = 0; i < theNames.length; i++)
+        {
             theNames[i] = theNames[i].strip();
         }
 
@@ -86,24 +91,37 @@ class LoginWindow
 
         Set<String> myNamesSet = new HashSet<String>(names);
 
-        if (myNamesSet.size() != names.size()) {
+        if (myNamesSet.size() != names.size())
+        {
             // throw the error
             JOptionPane.showMessageDialog(this, "Please enter unique names");
             return;
         }
+        if (names.size() < 2)
+        {
+            JOptionPane.showMessageDialog(this, "Please enter at least two names");
+            return;
+        }
 
-        for (String name : names) {
-            Player p = new Player(name.strip());
-            game.addPlayer(p);
+        for (String name : names)
+        {
+            if (name.length() > 0)
+            {
+                Player p = new Player(name.strip());
+                game.addPlayer(p);
+            }
         }
 
         // throw dialog errors when two names are the same
     }
 
-    public void actionPerformed(ActionEvent e) {
+
+    public void actionPerformed(ActionEvent e)
+    {
         addPlayersInTheGame();
 
-        if (game.getPlayers().size() == 0) {
+        if (game.getPlayers().size() == 0)
+        {
             return;
         }
 
@@ -111,42 +129,13 @@ class LoginWindow
         dispose();
 
         GameWindow gameWindow = new GameWindow(game);
-        gameWindow.setSize(400, 400);
-
-        // Get the size of the screen
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-        // Determine the new location of the JFrame
-        int w = gameWindow.getSize().width;
-        int h = gameWindow.getSize().height;
-        int x = (dim.width - w) / 2;
-        int y = (dim.height - h) / 2;
-
-        // Move the JFrame to the center of the screen
-        gameWindow.setLocation(x, y);
+        gameWindow.setSize(600, 600);
+        gameWindow.setLocationRelativeTo(null); // center the frame
 
         // Function to set visibility of JFrame.
         gameWindow.setVisible(true);
 
         // Function to set default operation of JFrame.
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-}
-
-// create the main class
-class LoginWindowDemo {
-    // main() method start
-    public static void main(String arg[]) {
-        JeopardyGame j = new JeopardyGame();
-
-        try {
-            // create instance of the CreateLoginForm
-            LoginWindow form = new LoginWindow(j);
-            form.setSize(300, 100); // set size of the frame
-            form.setVisible(true); // make form visible to the user
-        } catch (Exception e) {
-            // handle exception
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
     }
 }
