@@ -103,7 +103,7 @@ public class Player
         else
         {
             // if the points are equal, sort by username
-            return username.compareTo(otherPlayer.getUsername());
+            return -username.compareTo(otherPlayer.getUsername());
         }
     }
 }

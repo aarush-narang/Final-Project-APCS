@@ -132,8 +132,9 @@ public class JeopardyGame
      */
     private Card[] getFiveRandomCards(int point)
     {
-        Card[] card = new Card[5];
-        for (int i = 0; i < 5; i++)
+        int num = MAX_POINTS / 100;
+        Card[] card = new Card[num];
+        for (int i = 0; i < num; i++)
         {
             card[i] = getSingularCard(point);
         }
