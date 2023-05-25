@@ -1,7 +1,5 @@
 package classes;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,19 +9,25 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import javax.swing.JFrame;
 
+/**
+ * Main class. Creates the GUI windows, adds and stores the players in the game,
+ * and gets the cards that will be displayed in the game.
+ */
 public class JeopardyGame
 {
     public static final int          MAX_POINTS = 500;
-    private TreeSet<Player>          players;
+    private ArrayList<Player>        players;
     private Queue<Player>            playerQueue;
     private TreeMap<Integer, Card[]> questions;
 
+    /**
+     * Constructor for JeopardyGame class
+     */
     public JeopardyGame()
     {
-        players = new TreeSet<Player>();
+        players = new ArrayList<Player>();
         playerQueue = new LinkedList<Player>();
         questions = new TreeMap<Integer, Card[]>();
 
@@ -36,6 +40,9 @@ public class JeopardyGame
 
     /**
      * Adds a player to the Jeopardy Game
+     * 
+     * @param player
+     *            the player to add
      */
     public void addPlayer(Player player)
     {
@@ -51,15 +58,19 @@ public class JeopardyGame
      */
     public ArrayList<Player> getPlayers()
     {
-        ArrayList<Player> p = new ArrayList<Player>();
-        Iterator<Player> i = players.iterator();
-        while (i.hasNext())
+        TreeSet<Player> p = new TreeSet<Player>();
+        p.addAll(players);
+
+        ArrayList<Player> players = new ArrayList<Player>();
+
+        // iterate in descending order of points
+        Iterator<Player> iter = p.descendingIterator();
+        while (iter.hasNext())
         {
-            Player player = i.next();
-            p.add(player);
+            players.add(iter.next());
         }
 
-        return p;
+        return players;
     }
 
 

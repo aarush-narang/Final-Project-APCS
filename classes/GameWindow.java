@@ -12,15 +12,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.TreeMap;
-
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -53,6 +51,8 @@ public class GameWindow
 
     JTextField           field;
 
+    ArrayList<Player>    players;
+
     /**
      * Constructs a new game window
      * 
@@ -62,6 +62,7 @@ public class GameWindow
     public GameWindow(JeopardyGame game)
     {
         this.game = game;
+        updatePlayers();
 
         // General Layout
         setTitle("Jeopardy");
@@ -229,53 +230,40 @@ public class GameWindow
 
     public void makeLeaderbordButton()
     {
-        ArrayList<Player> p = game.getPlayers();
+        updatePlayers();
 
         JButton leaderboard = new JButton("Leaderboard");
 
         leaderboard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
+                updatePlayers();
+
                 JFrame qFrame = new JFrame("Leaderboard");
 
-                qFrame.setPreferredSize(new Dimension(500, 300));
+                qFrame.setPreferredSize(new Dimension(600, 300));
                 qFrame.setLocationRelativeTo(null);
-                // Get the size of the screen
-                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-                // Determine the new location of the JFrame
-                int w = qFrame.getSize().width;
-                int h = qFrame.getSize().height;
-                int x = (dim.width - w) / 2;
-                int y = (dim.height - h) / 2;
-
-                // Move the JFrame to the center of the screen
-                qFrame.setLocation(x, y);
 
                 JPanel qPanel = new JPanel(new BorderLayout());
 
                 DefaultListModel<String> leaderboardModel = new DefaultListModel<String>();
 
-                JPanel buttonPanel = new JPanel(new GridBagLayout()); // Set the
-                                                                      // layout
-                                                                      // to
-                                                                      // GridBagLayout
+                JPanel buttonPanel = new JPanel(new GridBagLayout());
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 gbc.weightx = 1.0;
-                gbc.anchor = GridBagConstraints.NORTH; // Set the anchor to
-                                                       // NORTH
+                gbc.anchor = GridBagConstraints.NORTH;
 
-                for (int i = 0; i < p.size(); i++)
+                for (int i = 0; i < players.size(); i++)
                 {
-
-                    if (game.getCurrentPlayer().equals(p.get(i)))
+                    if (game.getCurrentPlayer().equals(players.get(i)))
                     {
-                        leaderboardModel.addElement((i + 1) + " " + p.get(i) + " (current turn)");
+                        leaderboardModel
+                            .addElement((i + 1) + ". " + players.get(i) + " (current turn)");
                     }
                     else
                     {
-                        leaderboardModel.addElement((i + 1) + " " + p.get(i));
+                        leaderboardModel.addElement((i + 1) + ". " + players.get(i));
                     }
 
                     JButton plus = new JButton("+");
@@ -286,38 +274,89 @@ public class GameWindow
                     plus.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e)
                         {
-                            p.get(index).changePoints(100);
+                            players.get(index).changePoints(100);
 
-                            if (game.getCurrentPlayer().equals(p.get(index)))
+                            updatePlayers();
+
+                            // Update the leaderboard model with the new player
+                            // list
+                            leaderboardModel.clear();
+                            for (int i = 0; i < players.size(); i++)
                             {
-                                leaderboardModel.set(
-                                    index,
-                                    (index + 1) + " " + p.get(index) + " (current turn)");
+                                if (game.getCurrentPlayer().equals(players.get(i)))
+                                {
+                                    leaderboardModel.addElement(
+                                        (i + 1) + ". " + players.get(i) + " (current turn)");
+                                }
+                                else
+                                {
+                                    leaderboardModel.addElement((i + 1) + ". " + players.get(i));
+                                }
                             }
-                            else
+
+                            // Update the leaderboard model with the new point
+                            // values
+                            for (int i = 0; i < players.size(); i++)
                             {
-                                leaderboardModel.set(index, (index + 1) + " " + p.get(index));
+                                if (game.getCurrentPlayer().equals(players.get(i)))
+                                {
+                                    leaderboardModel.set(
+                                        i,
+                                        (i + 1) + ". " + players.get(i) + " (current turn)");
+                                }
+                                else
+                                {
+                                    leaderboardModel.set(i, (i + 1) + ". " + players.get(i));
+                                }
                             }
+
+                            updatePlayers();
                         }
                     });
-
                     minus.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e)
                         {
-                            p.get(index).changePoints(-100);
+                            players.get(index).changePoints(-100);
 
-                            if (game.getCurrentPlayer().equals(p.get(index)))
+                            updatePlayers();
+
+                            // Update the leaderboard model with the new player
+                            // list
+                            leaderboardModel.clear();
+                            for (int i = 0; i < players.size(); i++)
                             {
-                                leaderboardModel.set(
-                                    index,
-                                    (index + 1) + " " + p.get(index) + " (current turn)");
+                                if (game.getCurrentPlayer().equals(players.get(i)))
+                                {
+                                    leaderboardModel.addElement(
+                                        (i + 1) + ". " + players.get(i) + " (current turn)");
+                                }
+                                else
+                                {
+                                    leaderboardModel.addElement((i + 1) + ". " + players.get(i));
+                                }
                             }
-                            else
+
+                            // Update the leaderboard model with the new point
+                            // values
+                            for (int i = 0; i < players.size(); i++)
                             {
-                                leaderboardModel.set(index, (index + 1) + " " + p.get(index));
+                                if (game.getCurrentPlayer().equals(players.get(i)))
+                                {
+                                    leaderboardModel.set(
+                                        i,
+                                        (i + 1) + ". " + players.get(i) + " (current turn)");
+                                }
+                                else
+                                {
+                                    leaderboardModel.set(i, (i + 1) + ". " + players.get(i));
+                                }
                             }
+
+                            updatePlayers();
                         }
                     });
+
+                    updatePlayers();
 
                     JPanel buttonSubPanel = new JPanel(new BorderLayout());
 
@@ -326,18 +365,25 @@ public class GameWindow
 
                     gbc.gridy = i; // Set the gridy to i
                     gbc.anchor = GridBagConstraints.NORTH; // Set the anchor to
-                                                           // NORTH
+                    // NORTH
                     buttonPanel.add(buttonSubPanel, gbc); // Add the sub-panel
-                                                          // to the main button
-                                                          // panel
+                    // to the main button
+                    // panel
                 }
+
+                updatePlayers();
+
+                JScrollPane scrollPane = new JScrollPane(buttonPanel);
                 JList<String> leaderboardList = new JList<>(leaderboardModel);
-                JScrollPane scrollPane = new JScrollPane(leaderboardList);
+                JScrollPane scrollPane2 = new JScrollPane(leaderboardList);
+
+                qPanel.add(scrollPane2, BorderLayout.WEST);
                 qPanel.add(scrollPane, BorderLayout.CENTER);
 
-                qPanel.add(buttonPanel, BorderLayout.EAST); // Add the button
-                                                            // panel to the main
-                                                            // panel
+                JSplitPane splitPane =
+                    new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane2, scrollPane);
+                splitPane.setResizeWeight(0.75);
+                qPanel.add(splitPane, BorderLayout.CENTER);
 
                 qFrame.add(qPanel);
                 qFrame.pack();
@@ -345,23 +391,31 @@ public class GameWindow
             }
         });
 
+        updatePlayers();
+
         // Adding the leaderboard button to the game window
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0; // Set weightx to 1.0
         gbc.gridwidth = GridBagConstraints.REMAINDER; // Set gridwidth to
-                                                      // REMAINDER
+        // REMAINDER
         gbc.anchor = GridBagConstraints.NORTH; // Set the anchor to NORTH
-        gbc.gridy = p.size(); // Set the gridy to the last row
+        gbc.gridy = players.size(); // Set the gridy to the last row
         buttonPanel.add(leaderboard, gbc);
         c.add(buttonPanel);
     }
 
 
+    public void updatePlayers()
+    {
+        this.players = new ArrayList<>(game.getPlayers());
+    }
+
+
     public void actionPerformed(ActionEvent e)
     {
-
+        updatePlayers();
     }
 
     private static class RoundedBorder

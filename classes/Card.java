@@ -1,11 +1,17 @@
 package classes;
 
-public class Card {
-    private String question;
-    private String answer;
-    private int points;
-    private String category;
-    private Player respondent;
+/**
+ * This class represents a card. It has information about the question it holds
+ * as well as the answer. It also has the points it is worth. It has methods to
+ * mark it as correct, incorrect, etc.
+ */
+public class Card
+{
+    private String  question;
+    private String  answer;
+    private int     points;
+    private String  category;
+    private Player  respondent;
     private boolean correct;
     private boolean isVisible;
 
@@ -14,15 +20,16 @@ public class Card {
      * The rest is initialized to false or null.
      * 
      * @param question
-     *                 - question
+     *            - question
      * @param answer
-     *                 - answer
+     *            - answer
      * @param points
-     *                 - point value
+     *            - point value
      * @param category
-     *                 - category
+     *            - category
      */
-    public Card(String question, String answer, int points, String category) {
+    public Card(String question, String answer, int points, String category)
+    {
         this.points = points;
         this.question = question;
         this.answer = answer;
@@ -32,23 +39,28 @@ public class Card {
         isVisible = true;
     }
 
+
     /**
      * Returns the question for the card
      * 
      * @return the question for the card
      */
-    public String getQuestion() {
+    public String getQuestion()
+    {
         return question;
     }
+
 
     /**
      * Returns the answer to the question of the card
      * 
      * @return the answer to the question of the card
      */
-    public String getAnswer() {
+    public String getAnswer()
+    {
         return answer;
     }
+
 
     /**
      * Retunrs the number of points this card is worth
@@ -56,36 +68,44 @@ public class Card {
      * @return number of points
      */
 
-    public int getPoints() {
+    public int getPoints()
+    {
         return points;
     }
+
 
     /**
      * Returns the category of the card
      * 
      * @return the category of the card
      */
-    public String getCategory() {
+    public String getCategory()
+    {
         return category;
     }
+
 
     /**
      * Returns the player who answered the card
      * 
      * @return the player who answered the card
      */
-    public Player getRespondent() {
+    public Player getRespondent()
+    {
         return respondent;
     }
+
 
     /**
      * Returns if the card is visible or not
      * 
      * @return true if the card is visible, false if the card is not visible
      */
-    public boolean getVisibility() {
+    public boolean getVisibility()
+    {
         return isVisible;
     }
+
 
     /**
      * Returns if the player answered the card correctly or not
@@ -93,48 +113,58 @@ public class Card {
      * @return true if the player answered the card correctly, false if the
      *         player did not answer the card correctly
      */
-    public boolean getCorrect() {
+    public boolean getCorrect()
+    {
         return correct;
     }
+
 
     /**
      * Disables the card so that it is no longer accessible
      */
-    public void disableQuestion() {
+    public void disableQuestion()
+    {
         isVisible = false;
     }
+
 
     /**
      * Marks the card as incorrect
      */
-    public void markIncorrect() {
+    public void markIncorrect()
+    {
         correct = false;
 
     }
 
+
     /**
      * Marks the card as correct
      */
-    public void markCorrect() {
+    public void markCorrect()
+    {
         correct = true;
     }
+
 
     /**
      * Submits the player's answer to the card and determines if the submitted
      * answer matches with the card's answer
      * 
      * @param a
-     *               - answer that the player is submtting
+     *            - answer that the player is submtting
      * @param player
-     *               - player that is submitting this answer
+     *            - player that is submitting this answer
      * @return true if the submitted answer matches answer (the answer to the
      *         card), false if the submitted answer does not match answer(the
      *         answer to the card)
      */
-    public boolean submitAnswer(String a, Player player) {
+    public boolean submitAnswer(String a, Player player)
+    {
         respondent = player;
 
-        if (a.equalsIgnoreCase(answer)) {
+        if (a.equalsIgnoreCase(answer))
+        {
             player.changePoints(points);
 
             correct = true;
@@ -146,10 +176,12 @@ public class Card {
         return false;
     }
 
+
     /**
      * @return the question and answer along with the point value as a string
      */
-    public String toString() {
+    public String toString()
+    {
         return question + ": " + answer + " ($" + points + ")";
     }
 

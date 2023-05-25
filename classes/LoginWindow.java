@@ -1,17 +1,13 @@
 package classes;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -87,23 +83,21 @@ class LoginWindow
             theNames[i] = theNames[i].strip();
         }
 
-        ArrayList<String> names = new ArrayList<>(Arrays.asList(theNames));
+        Set<String> myNamesSet = new HashSet<String>(Arrays.asList(theNames));
 
-        Set<String> myNamesSet = new HashSet<String>(names);
-
-        if (myNamesSet.size() != names.size())
+        if (myNamesSet.size() != theNames.length)
         {
             // throw the error
             JOptionPane.showMessageDialog(this, "Please enter unique names");
             return;
         }
-        if (names.size() < 2)
+        if (theNames.length < 2)
         {
             JOptionPane.showMessageDialog(this, "Please enter at least two names");
             return;
         }
 
-        for (String name : names)
+        for (String name : theNames)
         {
             if (name.length() > 0)
             {
