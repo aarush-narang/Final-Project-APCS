@@ -37,21 +37,23 @@ public class GameWindow
     extends JFrame
     implements ActionListener
 {
-    private JeopardyGame game;
+    private JeopardyGame     game;
 
     // Declaration of objects of CardLayout class.
-    CardLayout           card;
+    CardLayout               card;
 
     // Declaration of objects of JButton class.
-    JButton              b1, b2;
+    JButton                  b1, b2;
 
     // Declaration of objects
     // of Container class.
-    Container            c;
+    Container                c;
 
-    JTextField           field;
+    JTextField               field;
 
-    ArrayList<Player>    players;
+    ArrayList<Player>        players;
+
+    DefaultListModel<String> leaderboardModel;
 
     /**
      * Constructs a new game window
@@ -62,7 +64,8 @@ public class GameWindow
     public GameWindow(JeopardyGame game)
     {
         this.game = game;
-        updatePlayers();
+        this.leaderboardModel = new DefaultListModel<String>();
+        updatePlayersAndLeaderboard();
 
         // General Layout
         setTitle("Jeopardy");
@@ -134,7 +137,7 @@ public class GameWindow
                         button.setForeground(Color.WHITE);
 
                         game.getNextPlayer(); // Move to the next player
-
+                        updatePlayersAndLeaderboard();
                     }
                 });
 
@@ -199,6 +202,8 @@ public class GameWindow
 
                         game.getNextPlayer(); // Move to the next player
 
+                        updatePlayersAndLeaderboard();
+
                         // Close the question window
                         questionFrame.dispose();
                     }
@@ -230,14 +235,14 @@ public class GameWindow
 
     public void makeLeaderbordButton()
     {
-        updatePlayers();
+        updatePlayersAndLeaderboard();
 
         JButton leaderboard = new JButton("Leaderboard");
 
         leaderboard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                updatePlayers();
+                updatePlayersAndLeaderboard();
 
                 JFrame qFrame = new JFrame("Leaderboard");
 
@@ -245,8 +250,6 @@ public class GameWindow
                 qFrame.setLocationRelativeTo(null);
 
                 JPanel qPanel = new JPanel(new BorderLayout());
-
-                DefaultListModel<String> leaderboardModel = new DefaultListModel<String>();
 
                 JPanel buttonPanel = new JPanel(new GridBagLayout());
                 GridBagConstraints gbc = new GridBagConstraints();
@@ -276,41 +279,7 @@ public class GameWindow
                         {
                             players.get(index).changePoints(100);
 
-                            updatePlayers();
-
-                            // Update the leaderboard model with the new player
-                            // list
-                            leaderboardModel.clear();
-                            for (int i = 0; i < players.size(); i++)
-                            {
-                                if (game.getCurrentPlayer().equals(players.get(i)))
-                                {
-                                    leaderboardModel.addElement(
-                                        (i + 1) + ". " + players.get(i) + " (current turn)");
-                                }
-                                else
-                                {
-                                    leaderboardModel.addElement((i + 1) + ". " + players.get(i));
-                                }
-                            }
-
-                            // Update the leaderboard model with the new point
-                            // values
-                            for (int i = 0; i < players.size(); i++)
-                            {
-                                if (game.getCurrentPlayer().equals(players.get(i)))
-                                {
-                                    leaderboardModel.set(
-                                        i,
-                                        (i + 1) + ". " + players.get(i) + " (current turn)");
-                                }
-                                else
-                                {
-                                    leaderboardModel.set(i, (i + 1) + ". " + players.get(i));
-                                }
-                            }
-
-                            updatePlayers();
+                            updatePlayersAndLeaderboard();
                         }
                     });
                     minus.addActionListener(new ActionListener() {
@@ -318,45 +287,11 @@ public class GameWindow
                         {
                             players.get(index).changePoints(-100);
 
-                            updatePlayers();
-
-                            // Update the leaderboard model with the new player
-                            // list
-                            leaderboardModel.clear();
-                            for (int i = 0; i < players.size(); i++)
-                            {
-                                if (game.getCurrentPlayer().equals(players.get(i)))
-                                {
-                                    leaderboardModel.addElement(
-                                        (i + 1) + ". " + players.get(i) + " (current turn)");
-                                }
-                                else
-                                {
-                                    leaderboardModel.addElement((i + 1) + ". " + players.get(i));
-                                }
-                            }
-
-                            // Update the leaderboard model with the new point
-                            // values
-                            for (int i = 0; i < players.size(); i++)
-                            {
-                                if (game.getCurrentPlayer().equals(players.get(i)))
-                                {
-                                    leaderboardModel.set(
-                                        i,
-                                        (i + 1) + ". " + players.get(i) + " (current turn)");
-                                }
-                                else
-                                {
-                                    leaderboardModel.set(i, (i + 1) + ". " + players.get(i));
-                                }
-                            }
-
-                            updatePlayers();
+                            updatePlayersAndLeaderboard();
                         }
                     });
 
-                    updatePlayers();
+                    updatePlayersAndLeaderboard();
 
                     JPanel buttonSubPanel = new JPanel(new BorderLayout());
 
@@ -371,7 +306,7 @@ public class GameWindow
                     // panel
                 }
 
-                updatePlayers();
+                updatePlayersAndLeaderboard();
 
                 JScrollPane scrollPane = new JScrollPane(buttonPanel);
                 JList<String> leaderboardList = new JList<>(leaderboardModel);
@@ -391,7 +326,7 @@ public class GameWindow
             }
         });
 
-        updatePlayers();
+        updatePlayersAndLeaderboard();
 
         // Adding the leaderboard button to the game window
         JPanel buttonPanel = new JPanel(new GridBagLayout());
@@ -407,15 +342,34 @@ public class GameWindow
     }
 
 
-    public void updatePlayers()
+    private void updatePlayersAndLeaderboard()
     {
-        this.players = new ArrayList<>(game.getPlayers());
+        players = new ArrayList<>(game.getPlayers());
+
+        updateLeaderboard();
+    }
+
+
+    private void updateLeaderboard()
+    {
+        leaderboardModel.clear();
+        for (int i = 0; i < players.size(); i++)
+        {
+            if (game.getCurrentPlayer().equals(players.get(i)))
+            {
+                leaderboardModel.addElement((i + 1) + ". " + players.get(i) + " (current turn)");
+            }
+            else
+            {
+                leaderboardModel.addElement((i + 1) + ". " + players.get(i));
+            }
+        }
     }
 
 
     public void actionPerformed(ActionEvent e)
     {
-        updatePlayers();
+        updatePlayersAndLeaderboard();
     }
 
     private static class RoundedBorder
