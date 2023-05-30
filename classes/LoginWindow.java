@@ -15,27 +15,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-// create CreateLoginForm class to create login form
-// class extends JFrame to create a window where our component add
-// class implements ActionListener to perform an action on button click
-class LoginWindow
+/**
+ * Represents a login window for the game, where the user can enter the names of
+ * the players in the game. The window will close when the user clicks the
+ * submit button and will open the game window.
+ */
+public class LoginWindow
     extends JFrame
     implements ActionListener
 {
-    private JeopardyGame game;
+    private JeopardyGame     game;
+    private JButton          b1;
+    private JPanel           newPanel;
+    private JLabel           passLabel;
+    private final JTextField textField1;
 
-    // initialize button, panel, label, and text field
-
-    boolean              twoFieldsMatch; // checks if number of players equals
-                                         // the number of names
-
-    JButton              b1;
-    JPanel               newPanel;
-    JLabel               passLabel;
-    final JTextField     textField1;
-    // JButton leaderboard;
-
-    // calling constructor
+    /**
+     * Creates a new login window for the game.
+     * 
+     * @param game
+     *            the game to create the login window for
+     */
     LoginWindow(JeopardyGame game)
     {
         this.game = game;
@@ -68,8 +68,10 @@ class LoginWindow
     }
 
 
-    // define abstract method actionPerformed() which will be called on button
-    // click
+    /**
+     * Adds the players in the game based on the text entered in the text field.
+     * Names are seperated by a comma.
+     */
     private void addPlayersInTheGame() // pass action listener as a
                                        // parameter
     {
@@ -110,6 +112,15 @@ class LoginWindow
     }
 
 
+    /**
+     * Performs an action when the submit button is clicked. The action is to
+     * add the players in the game based on the text entered in the text field.
+     * The helper method addPlayersInTheGame() is called to add the players in
+     * the game.
+     * 
+     * @param e
+     *            the action event
+     */
     public void actionPerformed(ActionEvent e)
     {
         addPlayersInTheGame();

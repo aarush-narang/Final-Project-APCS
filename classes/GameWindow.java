@@ -1,7 +1,6 @@
 package classes;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -37,29 +36,19 @@ public class GameWindow
     extends JFrame
     implements ActionListener
 {
-    private JeopardyGame     game;
+    private JeopardyGame             game;
 
-    // Declaration of objects of CardLayout class.
-    CardLayout               card;
+    private Container                c;
 
-    // Declaration of objects of JButton class.
-    JButton                  b1, b2;
+    private ArrayList<Player>        players;
 
-    // Declaration of objects
-    // of Container class.
-    Container                c;
-
-    JTextField               field;
-
-    ArrayList<Player>        players;
-
-    DefaultListModel<String> leaderboardModel;
+    private DefaultListModel<String> leaderboardModel;
 
     /**
      * Constructs a new game window
      * 
      * @param game
-     *            - the game to be played
+     *            the game to be played
      */
     public GameWindow(JeopardyGame game)
     {
@@ -95,6 +84,12 @@ public class GameWindow
     }
 
 
+    /**
+     * Creates a button for a card in the game.
+     * 
+     * @param card
+     *            the card to create a button for
+     */
     public void makeButton(Card card)
     {
         // Initialization of object "b" of JButton class.
@@ -233,6 +228,9 @@ public class GameWindow
     }
 
 
+    /**
+     * Creates a button for the leaderboard to open up in a new window.
+     */
     public void makeLeaderbordButton()
     {
         updatePlayersAndLeaderboard();
@@ -342,6 +340,10 @@ public class GameWindow
     }
 
 
+    /**
+     * Updates the players and the leaderboard. Updates the leaderboard using
+     * the helper method updateLeaderboard().
+     */
     private void updatePlayersAndLeaderboard()
     {
         players = new ArrayList<>(game.getPlayers());
@@ -350,6 +352,10 @@ public class GameWindow
     }
 
 
+    /**
+     * Updates the leaderboard. Clears the leaderboard and adds the players in
+     * the correct order using new data.
+     */
     private void updateLeaderboard()
     {
         leaderboardModel.clear();
@@ -367,35 +373,75 @@ public class GameWindow
     }
 
 
+    /**
+     * Updates the players and the leaderboard.
+     * 
+     * @param e
+     *            the action event
+     */
     public void actionPerformed(ActionEvent e)
     {
         updatePlayersAndLeaderboard();
     }
 
+    /**
+     * A class that creates a rounded border for the buttons.
+     */
     private static class RoundedBorder
         implements Border
     {
 
         private int radius;
 
+        /**
+         * Constructor for the rounded border.
+         * 
+         * @param radius
+         *            the radius of the border
+         */
         RoundedBorder(int radius)
         {
             this.radius = radius;
         }
 
 
+        /**
+         * Gets the border insets.
+         * 
+         * @param c
+         *            the component to get the border insets for
+         */
         public Insets getBorderInsets(Component c)
         {
             return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
         }
 
 
+        /**
+         * Checks if the border is opaque.
+         */
         public boolean isBorderOpaque()
         {
             return true;
         }
 
 
+        /**
+         * Paints the border.
+         * 
+         * @param c
+         *            the component to paint the border for
+         * @param g
+         *            the graphics object
+         * @param x
+         *            the x coordinate
+         * @param y
+         *            the y coordinate
+         * @param width
+         *            the width of the border
+         * @param height
+         *            the height of the border
+         */
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
         {
             g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);

@@ -26,6 +26,9 @@ public class Player
 
     /**
      * Constructs a new player with the given username and 0 points
+     * 
+     * @param u
+     *            the username of the player
      */
     public Player(String u)
     {

@@ -20,13 +20,13 @@ public class Card
      * The rest is initialized to false or null.
      * 
      * @param question
-     *            - question
+     *            question
      * @param answer
-     *            - answer
+     *            answer
      * @param points
-     *            - point value
+     *            point value
      * @param category
-     *            - category
+     *            category
      */
     public Card(String question, String answer, int points, String category)
     {
@@ -152,9 +152,9 @@ public class Card
      * answer matches with the card's answer
      * 
      * @param a
-     *            - answer that the player is submtting
+     *            answer that the player is submtting
      * @param player
-     *            - player that is submitting this answer
+     *            player that is submitting this answer
      * @return true if the submitted answer matches answer (the answer to the
      *         card), false if the submitted answer does not match answer(the
      *         answer to the card)
