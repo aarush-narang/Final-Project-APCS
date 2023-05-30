@@ -5,7 +5,7 @@ package classes;
  * can be sorted by points in the TreeSet.
  */
 public class Player
-    implements Comparable
+    implements Comparable<Object>
 {
 
     private String username;
