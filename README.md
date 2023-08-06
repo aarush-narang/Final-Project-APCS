@@ -1,6 +1,3 @@
-# Final-Project-APCS
-
-Final Project for APCS A
 In this project, we aim to develop a program in Java which will allow multiple people to play Jeopardy.
 
 Jeopardy is a game in which players compete against each other, answering questions worth different points based on their difficulty level. There is a minimum of two players and a maximum of 5 players. If you get the question correct, you get the points the question is worth, but if you get it incorrect, you lose that many points. Each person’s score is located on the bottom of the screen. The player with the most points at the end wins. The different players will be able to play on the same computer taking turns to answer questions and gain points.
